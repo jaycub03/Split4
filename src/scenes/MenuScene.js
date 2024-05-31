@@ -34,12 +34,7 @@ class MenuScene extends Phaser.Scene {
         });
 
         // Add pointer (click) event to start the animations and sound
-        this.playOnce = 0;
-
-        if (this.playOnce === 0)
-        {
-            this.input.on('pointerdown', this.startGame, this);
-        }
+        this.input.on('pointerdown', this.startGame, this);
 
         // Initialize menu sound
         this.menuSound = this.sound.add("menuaudio");
@@ -66,6 +61,5 @@ class MenuScene extends Phaser.Scene {
         //play menu animation/sound
         this.menuAnimation.play("menu_anims");
         this.menuSound.play();
-        this.playOnce += 1;
     }
 }
