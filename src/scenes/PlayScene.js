@@ -10,7 +10,7 @@ class PlayScene extends Phaser.Scene {
 
     create() {
         //display background image
-        this.backgroundImage = this.add.tileSprite(0, 0, 900, 700, "road").setOrigin(0, 0);
+        this.backgroundImage = this.add.tileSprite(0, 0, 700, 700, "road").setOrigin(0, 0);
     }
 
     update() {
