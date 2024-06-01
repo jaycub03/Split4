@@ -134,18 +134,3 @@ class PlayScene extends Phaser.Scene {
         this.matter.world.pause();
     }
 }
-
-const config = {
-    type: Phaser.AUTO,
-    width: 700,
-    height: 700,
-    physics: {
-        default: 'matter',
-        matter: {
-            debug: true
-        }
-    },
-    scene: PlayScene
-};
-
-const game = new Phaser.Game(config);
