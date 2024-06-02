@@ -52,7 +52,7 @@ class PlayScene extends Phaser.Scene {
     
         // Create GUI box
         this.guiBox = this.add.graphics();
-        this.guiBox.fillStyle(0x000000, 0.5); // Black color with 50% opacity
+        this.guiBox.fillStyle(0x000000, 0.5); 
         this.guiBox.fillRect(462.5, 600, 200, 80);
     
         // Create timer text
@@ -158,7 +158,9 @@ class PlayScene extends Phaser.Scene {
             this.timerCountdown -= 1;
             this.timerText.setText('Arrival in: ' + this.timerCountdown);
         } else {
-            // Handle timer reaching 0
+            // Timer reached 0, switch to GameOverScene
+            this.scene.start('GameOverScene');
         }
     }
+    
 }
