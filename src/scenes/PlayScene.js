@@ -2,6 +2,7 @@ class PlayScene extends Phaser.Scene {
     constructor() {
         super("PlayScene");
         this.speed = 7; // Initialize speed variable
+        this.timerCountdown = 60; // Initialize timer countdown to 60 seconds
     }
 
     preload() {
@@ -16,13 +17,13 @@ class PlayScene extends Phaser.Scene {
     create() {
         // Display background image
         this.backgroundImage = this.add.tileSprite(0, 0, 700, 700, "road").setOrigin(0, 0);
-
+    
         // Create car sprite with Matter.js physics
         this.car = this.matter.add.sprite(300, 450, "car").setScale(0.3);
         // Set a smaller rectangle for the car hitbox
         this.car.setRectangle(this.car.width * 0.15, this.car.height * 0.2);
         this.car.setStatic(true); // Set the car to be static
-
+    
         // Create cursor keys for movement
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -32,7 +33,7 @@ class PlayScene extends Phaser.Scene {
         
         // Variables to track tilt angle
         this.tiltSpeed = 0.51; // Speed of tilting
-
+    
         // Group for traffic
         this.trafficGroup = this.add.group();
         this.time.addEvent({
@@ -41,21 +42,39 @@ class PlayScene extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
-
+    
         // Collision between car and traffic
         this.matter.world.on('collisionstart', (event, bodyA, bodyB) => {
             if (bodyA.gameObject === this.car || bodyB.gameObject === this.car) {
                 this.handleCollision();
             }
         });
+    
+        // Create GUI box
+        this.guiBox = this.add.graphics();
+        this.guiBox.fillStyle(0x000000, 0.5); // Black color with 50% opacity
+        this.guiBox.fillRect(462.5, 600, 200, 80);
+    
+        // Create timer text
+        this.timerText = this.add.text(650, 650, 'Arrival in: ' + this.timerCountdown, { font: '32px Arial', fill: '#ffffff' }).setOrigin(1, 1);
+    
+        // Update the timer every second
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.updateTimer,
+            callbackScope: this,
+            loop: true
+        });
     }
+    
+    
 
     update() {
-        if(this.speed > 15){
+        if (this.speed > 15) {
             this.speed = 15;
         }
 
-        if(this.speed < 1){
+        if (this.speed < 1) {
             this.speed = 1;
         }
 
@@ -132,5 +151,14 @@ class PlayScene extends Phaser.Scene {
     handleCollision() {
         this.car.setTint(0xff0000);
         this.matter.world.pause();
+    }
+
+    updateTimer() {
+        if (this.timerCountdown > 0) {
+            this.timerCountdown -= 1;
+            this.timerText.setText('Arrival in: ' + this.timerCountdown);
+        } else {
+            // Handle timer reaching 0
+        }
     }
 }
