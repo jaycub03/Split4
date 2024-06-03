@@ -10,7 +10,7 @@ class PlayScene extends Phaser.Scene {
         this.load.image("road", "./assets/playbackground.png");
         this.load.image("car", "./assets/car.png");
         this.load.image("traffic1", "./assets/traffic1.png");
-        this.load.image("traffic2", "./assets/traffic2.png");
+        this.load.image("traffic2", "./assets/TrafficCar1.png");
         this.load.image("traffic3", "./assets/traffic3.png");
     }
 
