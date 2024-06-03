@@ -38,7 +38,7 @@ class MenuScene extends Phaser.Scene {
 
         // Initialize menu sound
         this.menuSound = this.sound.add("menuaudio");
-        this.menuSound.setVolume(0.1);
+        this.menuSound.setVolume(0.3);
 
 
 

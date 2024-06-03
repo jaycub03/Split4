@@ -67,8 +67,6 @@ class PlayScene extends Phaser.Scene {
         });
     }
     
-    
-
     update() {
         if (this.speed > 15) {
             this.speed = 15;
@@ -155,12 +153,15 @@ class PlayScene extends Phaser.Scene {
 
     updateTimer() {
         if (this.timerCountdown > 0) {
-            this.timerCountdown -= 1;
+            if (this.wKey.isDown) {
+                this.timerCountdown -= 2;
+            } else {
+                this.timerCountdown -= 1;
+            }
             this.timerText.setText('Arrival in: ' + this.timerCountdown);
         } else {
             // Timer reached 0, switch to GameOverScene
             this.scene.start('GameOverScene');
         }
     }
-    
 }
