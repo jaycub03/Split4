@@ -5,6 +5,7 @@ class PlayScene extends Phaser.Scene {
         this.timerCountdown = 60; // Initialize timer countdown to 60 seconds
         this.initialSpeed = 7; // Initial speed
         this.initialTimerCountdown = 61; // Initial timer countdown
+        this.spawnDelay = 2000; // Initial spawn delay for traffic
     }
 
     preload() {
@@ -49,8 +50,10 @@ class PlayScene extends Phaser.Scene {
 
         // Group for traffic
         this.trafficGroup = this.add.group();
-        this.time.addEvent({
-            delay: 2000,
+
+        // Initial traffic spawn event
+        this.spawnTrafficEvent = this.time.addEvent({
+            delay: this.spawnDelay,
             callback: this.spawnTraffic,
             callbackScope: this,
             loop: true
@@ -89,16 +92,6 @@ class PlayScene extends Phaser.Scene {
         this.createBoundaries();
     }
 
-    createBoundaries() {
-        const { width, height } = this.sys.game.config;
-        
-        // Create left boundary
-        this.leftBoundary = this.matter.add.rectangle(0, height / 2, 10, height, { isStatic: true });
-
-        // Create right boundary
-        this.rightBoundary = this.matter.add.rectangle(width, height / 2, 10, height, { isStatic: true });
-    }
-
     update() {
         if (this.speed > 15) {
             this.speed = 15;
@@ -125,13 +118,13 @@ class PlayScene extends Phaser.Scene {
 
         this.setTrafficVelocity(this.speed); // Set traffic speed to match the road
 
-        if (this.aKey.isDown) {
+        if (this.aKey.isDown && this.car.x > 200) {
             this.car.setVelocityX(-20);
             this.car.setX(this.car.x - 2);
             if (this.car.angle > -7) {
                 this.car.setAngle(this.car.angle - this.tiltSpeed);
             }
-        } else if (this.dKey.isDown) {
+        } else if (this.dKey.isDown && this.car.x < 500) {
             this.car.setVelocityX(20);
             this.car.setX(this.car.x + 2);
             if (this.car.angle < 7) {
@@ -150,6 +143,17 @@ class PlayScene extends Phaser.Scene {
         // Restart the game if R key is pressed
         if (this.restartKey.isDown && this.gameOver) {
             this.restartGame();
+        }
+
+        // Decrease spawn delay over time until it reaches 1000 ms
+        if (this.spawnDelay > 1000) {
+            this.spawnDelay -= 10; // Adjust the rate of decrease as needed
+            this.spawnTrafficEvent.reset({
+                delay: this.spawnDelay,
+                callback: this.spawnTraffic,
+                callbackScope: this,
+                loop: true
+            });
         }
     }
 
@@ -246,5 +250,15 @@ class PlayScene extends Phaser.Scene {
 
         // Clear traffic group
         this.trafficGroup.clear(true, true);
+    }
+
+    createBoundaries() {
+        const { width, height } = this.sys.game.config;
+        
+        // Create left boundary
+        this.leftBoundary = this.matter.add.rectangle(0, height / 2, 10, height, { isStatic: true });
+
+        // Create right boundary
+        this.rightBoundary = this.matter.add.rectangle(width, height / 2, 10, height, { isStatic: true });
     }
 }
